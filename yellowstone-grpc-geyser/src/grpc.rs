@@ -105,10 +105,13 @@ pub struct MessageAccount {
     pub account: MessageAccountInfo,
     pub slot: u64,
     pub is_startup: bool,
+    pub received_at: u64,
 }
 
-impl<'a> From<(&'a ReplicaAccountInfoV3<'a>, u64, bool)> for MessageAccount {
-    fn from((account, slot, is_startup): (&'a ReplicaAccountInfoV3<'a>, u64, bool)) -> Self {
+impl<'a> From<(&'a ReplicaAccountInfoV3<'a>, u64, bool, u64)> for MessageAccount {
+    fn from(
+        (account, slot, is_startup, received_at): (&'a ReplicaAccountInfoV3<'a>, u64, bool, u64),
+    ) -> Self {
         Self {
             account: MessageAccountInfo {
                 pubkey: Pubkey::try_from(account.pubkey).expect("valid Pubkey"),
@@ -122,6 +125,7 @@ impl<'a> From<(&'a ReplicaAccountInfoV3<'a>, u64, bool)> for MessageAccount {
             },
             slot,
             is_startup,
+            received_at: received_at,
         }
     }
 }
@@ -418,6 +422,7 @@ impl<'a> MessageRef<'a> {
                 account: Some(message.account.to_proto(accounts_data_slice)),
                 slot: message.slot,
                 is_startup: message.is_startup,
+                received_at: message.received_at
             }),
             Self::Transaction(message) => UpdateOneof::Transaction(SubscribeUpdateTransaction {
                 transaction: Some(message.transaction.to_proto()),

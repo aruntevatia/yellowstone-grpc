@@ -413,6 +413,7 @@ impl From<SubscribeUpdateAccount> for AccountPretty {
         SubscribeUpdateAccount {
             is_startup,
             slot,
+            received_at,
             account,
         }: SubscribeUpdateAccount,
     ) -> Self {

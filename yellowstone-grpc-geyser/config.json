@@ -5,10 +5,6 @@
     },
     "grpc": {
         "address": "0.0.0.0:10000",
-        "tls_config": {
-            "cert_path": "",
-            "key_path": ""
-        },
         "compression": {
             "accept": [
                 "gzip"

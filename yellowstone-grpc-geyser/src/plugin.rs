@@ -9,13 +9,19 @@ use {
         ReplicaEntryInfoVersions, ReplicaTransactionInfoVersions, Result as PluginResult,
         SlotStatus,
     },
-    std::{concat, env, sync::Arc, time::Duration},
+    std::{concat, env, sync::Arc, time::{Duration, SystemTime}},
     tokio::{
         runtime::{Builder, Runtime},
         sync::{mpsc, Notify},
     },
 };
-
+pub fn time_in_micros() -> u64 {
+    let duration_since_epoch = SystemTime::now()
+        .duration_since(SystemTime::UNIX_EPOCH)
+        .unwrap();
+    let timestamp_micros = duration_since_epoch.as_micros() as u64;
+    return timestamp_micros;
+}
 #[derive(Debug)]
 pub struct PluginInner {
     runtime: Runtime,
@@ -116,6 +122,11 @@ impl GeyserPlugin for Plugin {
         slot: u64,
         is_startup: bool,
     ) -> PluginResult<()> {
+        if is_startup {
+            return Ok(());
+        }
+
+        let received_at = time_in_micros();
         self.with_inner(|inner| {
             let account = match account {
                 ReplicaAccountInfoVersions::V0_0_1(_info) => {
@@ -127,7 +138,7 @@ impl GeyserPlugin for Plugin {
                 ReplicaAccountInfoVersions::V0_0_3(info) => info,
             };
 
-            let message = Message::Account((account, slot, is_startup).into());
+            let message = Message::Account((account, slot, is_startup, received_at).into());
             if is_startup {
                 if let Some(channel) = &inner.snapshot_channel {
                     match channel.send(Some(message)) {
@@ -230,11 +241,11 @@ impl GeyserPlugin for Plugin {
     }
 
     fn transaction_notifications_enabled(&self) -> bool {
-        true
+        false
     }
 
     fn entry_notifications_enabled(&self) -> bool {
-        true
+        false
     }
 }
 
