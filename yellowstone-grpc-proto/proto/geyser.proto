@@ -111,6 +111,7 @@ message SubscribeUpdateAccount {
   uint64 slot = 2;
   bool is_startup = 3;
   uint64 received_at=4;
+  uint64 thread_id=5;
 }
 
 message SubscribeUpdateAccountInfo {

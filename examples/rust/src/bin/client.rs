@@ -415,6 +415,7 @@ impl From<SubscribeUpdateAccount> for AccountPretty {
             slot,
             received_at,
             account,
+            thread_id
         }: SubscribeUpdateAccount,
     ) -> Self {
         let account = account.expect("should be defined");

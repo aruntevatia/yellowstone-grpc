@@ -1,3 +1,5 @@
+use std::thread;
+use thread_id;
 use {
     crate::{
         config::Config,
@@ -9,12 +11,17 @@ use {
         ReplicaEntryInfoVersions, ReplicaTransactionInfoVersions, Result as PluginResult,
         SlotStatus,
     },
-    std::{concat, env, sync::Arc, time::{Duration, SystemTime}},
+    std::{
+        concat, env,
+        sync::Arc,
+        time::{Duration, SystemTime},
+    },
     tokio::{
         runtime::{Builder, Runtime},
         sync::{mpsc, Notify},
     },
 };
+
 pub fn time_in_micros() -> u64 {
     let duration_since_epoch = SystemTime::now()
         .duration_since(SystemTime::UNIX_EPOCH)
@@ -138,7 +145,16 @@ impl GeyserPlugin for Plugin {
                 ReplicaAccountInfoVersions::V0_0_3(info) => info,
             };
 
-            let message = Message::Account((account, slot, is_startup, received_at).into());
+            let message = Message::Account(
+                (
+                    account,
+                    slot,
+                    is_startup,
+                    received_at,
+                    thread_id::get() as u64,
+                )
+                    .into(),
+            );
             if is_startup {
                 if let Some(channel) = &inner.snapshot_channel {
                     match channel.send(Some(message)) {

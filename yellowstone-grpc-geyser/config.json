@@ -24,13 +24,13 @@
             "accounts": {
                 "max": 1,
                 "any": false,
-                "account_max": 10,
+                "account_max": 100,
                 "account_reject": [
-                    "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA"
+                    
                 ],
-                "owner_max": 10,
+                "owner_max": 100,
                 "owner_reject": [
-                    "11111111111111111111111111111111"
+                    
                 ]
             },
             "slots": {
@@ -39,9 +39,9 @@
             "transactions": {
                 "max": 1,
                 "any": false,
-                "account_include_max": 10,
+                "account_include_max": 20,
                 "account_include_reject": [
-                    "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA"
+                    
                 ],
                 "account_exclude_max": 10,
                 "account_required_max": 10
@@ -49,9 +49,9 @@
             "transactions_status": {
                 "max": 1,
                 "any": false,
-                "account_include_max": 10,
+                "account_include_max": 20,
                 "account_include_reject": [
-                    "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA"
+                    
                 ],
                 "account_exclude_max": 10,
                 "account_required_max": 10
@@ -61,7 +61,7 @@
                 "account_include_max": 10,
                 "account_include_any": false,
                 "account_include_reject": [
-                    "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA"
+                    
                 ],
                 "include_transactions": true,
                 "include_accounts": false,

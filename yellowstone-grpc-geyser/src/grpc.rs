@@ -106,11 +106,18 @@ pub struct MessageAccount {
     pub slot: u64,
     pub is_startup: bool,
     pub received_at: u64,
+    pub thread_id: u64,
 }
 
-impl<'a> From<(&'a ReplicaAccountInfoV3<'a>, u64, bool, u64)> for MessageAccount {
+impl<'a> From<(&'a ReplicaAccountInfoV3<'a>, u64, bool, u64, u64)> for MessageAccount {
     fn from(
-        (account, slot, is_startup, received_at): (&'a ReplicaAccountInfoV3<'a>, u64, bool, u64),
+        (account, slot, is_startup, received_at, thread_id): (
+            &'a ReplicaAccountInfoV3<'a>,
+            u64,
+            bool,
+            u64,
+            u64,
+        ),
     ) -> Self {
         Self {
             account: MessageAccountInfo {
@@ -126,6 +133,7 @@ impl<'a> From<(&'a ReplicaAccountInfoV3<'a>, u64, bool, u64)> for MessageAccount
             slot,
             is_startup,
             received_at: received_at,
+            thread_id: thread_id,
         }
     }
 }
@@ -422,7 +430,8 @@ impl<'a> MessageRef<'a> {
                 account: Some(message.account.to_proto(accounts_data_slice)),
                 slot: message.slot,
                 is_startup: message.is_startup,
-                received_at: message.received_at
+                received_at: message.received_at,
+                thread_id: message.thread_id,
             }),
             Self::Transaction(message) => UpdateOneof::Transaction(SubscribeUpdateTransaction {
                 transaction: Some(message.transaction.to_proto()),
